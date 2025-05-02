@@ -1,15 +1,13 @@
-<header>
-    <img id="header-logo" style="margin-top: 5px; width:69px; height:46px"
-        src="{{ "/res/img/header.gif" | relative_url }}" width="104" height="69" alt="pavlik_tt">
+<header id="page-header">
+    <img id="header-logo" style="margin-top: 5px; width:154px; height:38px;"
+        src="{{ "/assets/img/header.gif" | relative_url }}" alt="pavlik_tt">
     <br />
     <nav style="width:100%">
         <table class="navbar">
             <tr>
-                <td> 
+                <td>
                     <a href="{{ "/" | relative_url }}">[Home]</a>
-                </td>
-                <td style="text-align: right;">
-                    <a href="https://pavliktt.pp.ua/">[>> Back to the main site]</a>
+                    <a href="{{ "/news/" | relative_url }}">[News]</a>
                 </td>
             </tr>
         </table>

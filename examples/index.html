@@ -1,0 +1,92 @@
+---
+layout: default
+title: Examples
+permalink: /examples/
+---
+
+<h1>Examples</h1>
+
+<h2>Invert number (x * -1)</h2>
+<p>
+Assembly:
+<pre><code>
+<span class="opcode">ST</span> <span class="register">WR0</span>, <span class="const">12</span>
+<span class="opcode">NEG</span> <span class="register">WR0</span>        <span class="comment">; invert the number first</span>
+<span class="opcode">ADD</span> <span class="register">WR0</span>, <span class="const">1</span>     <span class="comment">; add 1</span>
+
+<span class="comment">; the result should be -12</span>
+</code></pre>
+ROM hexdump:
+<pre><code>
+<span class="comment">0000:</span> 0010 0000 000C
+<span class="comment">0003:</span> 00D0 0000 0000
+<span class="comment">0006:</span> 0070 0000 0001
+</code></pre>
+</p>
+
+<h2>Fibonacci</h2>
+<p>
+Assembly:
+<pre><code>
+<span class="comment">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          Fibonacci calculator for minCPU          ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; this code will calculate Fibonacci of number 10
+; however, it won't print it out
+; you can use minDBG to see the result.</span>
+
+<span class="opcode">JMP</span> <span class="label">_main</span>             <span class="comment">; the assembler will probably do it for us
+                      ; but just to be safe</span>
+
+<span class="label">fib:</span>
+  <span class="comment">; fib function
+  ; WR0 -- input number
+  ; WR1 -- return value
+  ; WR2 -- temporary buffer</span>
+  <span class="opcode">CGT</span> <span class="register">WR0</span>, <span class="const">$1</span>         <span class="comment">; If WR0 is greater than 1,</span>
+  <span class="opcode">JRC</span> <span class="label">+2</span>              <span class="comment">; we can move forward.</span>
+  <span class="opcode">ST</span> <span class="register">WR1</span>, <span class="register">WR0</span>         <span class="comment">; If not, then copy WR0 to WR1</span>
+  <span class="opcode">RET</span>                 <span class="comment">; and return.</span>
+  <span class="comment">; fib(x) = fib(x-1) + fib(x-2)</span>
+  <span class="opcode">DEC</span> <span class="register">WR0</span>             <span class="comment">; Decrement WR0 (x-1)</span>
+  <span class="opcode">CALL</span> <span class="label">fib</span>            <span class="comment">; Then call fib to set WR1 to fib(x-1)</span>
+  <span class="opcode">ST</span> <span class="register">WR2</span>, <span class="register">WR1</span>         <span class="comment">; Copy that to WR2</span>
+
+  <span class="comment">; Technically we do fib(x-2) + fib(x-1) and not fib(x-1) + fib(x-2)</span>
+  <span class="comment">; but who cares the result is the same lol</span>
+
+  <span class="opcode">DEC</span> <span class="register">WR0</span>             <span class="comment">; Decrement WR0 again (x-2)</span>
+  <span class="opcode">CALL</span> <span class="label">fib</span>            <span class="comment">; Then call fib to set WR1 to fib(x-2)</span>
+
+  <span class="opcode">ADD</span> <span class="register">WR1</span>, <span class="register">WR2</span>        <span class="comment">; add WR2 to WR1 since WR1 is return value</span>
+  <span class="opcode">RET</span>                 <span class="comment">; and then return.</span>
+
+
+<span class="comment">; _main label is the same as int main() in C(++)</span>
+<span class="comment">; but for minASM.</span>
+<span class="comment">; you don't need it if you don't have any labels in your code</span>
+<span class="label">_main:</span>
+  <span class="opcode">ST</span> <span class="register">WR0</span>, <span class="const">10</span>          <span class="comment">; set WR0 to 10 ($0A)</span>
+  <span class="opcode">CALL</span> <span class="label">fib</span>            <span class="comment">; call our function</span>
+  <span class="opcode">HLT</span>                 <span class="comment">; and then halt.</span>
+</code></pre>
+ROM hexdump:
+<pre><code>
+<span class="comment">0000:</span> 0110 0027 0000
+<span class="comment">0003:</span> 0158 0000 0000
+<span class="comment">0006:</span> 0120 0012 0000
+<span class="comment">0009:</span> 001b 0001 0000
+<span class="comment">000C:</span> 0040 0000 0000
+<span class="comment">0012:</span> 0062 0000 0000
+<span class="comment">0015:</span> 0030 0000 0000
+<span class="comment">0018:</span> 001b 0002 0001
+<span class="comment">001B:</span> 0062 0000 0000
+<span class="comment">001E:</span> 0030 0000 0000
+<span class="comment">0021:</span> 007b 0001 0002
+<span class="comment">0024:</span> 0040 0000 0000
+<span class="comment">0027:</span> 0018 0000 000a
+<span class="comment">002A:</span> 0030 0000 0000
+<span class="comment">002D:</span> FFFF FFFF FFFF
+</code></pre>
+Each line represents 6 bytes/1 instruction.
+</p>

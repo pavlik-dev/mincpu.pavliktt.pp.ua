@@ -3,37 +3,103 @@ layout: default
 title: minCPU
 ---
 
-<h1><img width="32" style="vertical-align: text-bottom;" src="/res/img/mincpu.gif" /> minCPU</h1>
-<p style="text-align:center"><i>One day I wanted to make my own processor... and I did!</i><br />
-  <a href="https://gitlab.com/mincpu/">GitLab</a>
-</p>
+<section style="vertical-align: middle; display:inline-block;">
+  <p><img src="assets/img/mincpu.gif">&nbsp;<i>One day I wanted to make my own processor... and I did!</i></p>
+</section>
 
-<h2>About</h2>
-minCPU is a CPU that's fairly easy to learn.<br />
-The instruction set is mostly empty, however
-you still can run impressive stuff on here. (maybe)<br />
-Everything is 16-bit, and by that I mean opcodes,
-arguments and memory, everything is 16-bit. (at least in minCPU-16)
+<section>
+  <p>
+    minCPU is a family of small, mostly-empty CPU designs.
+    Despite their simplicity, you might still manage to run impressive things on them.
+  </p>
+</section>
 
-<h2>Versions</h2>
-<i>Note: minCPU-16 instruction table and syntax is completely different from minCPU-8. minCPU-8 programs will not work
-  on
-  minCPU-16.</i>
-<h4>minCPU-16</h4>
-<p>
-  Built from scratch on the experience already gained, 16-bit, has functions.<br />
-  <a href="https://gitlab.com/mincpu/mincpu-16">GitLab</a>
-</p>
-<h4>minCPU-8</h4>
-<p>
-  The very first in the family, terrible in terms of functionality, runs on Python, <b>no longer maintained.</b><br />
-  <a href="https://gitlab.com/mincpu/mincpu-8">GitLab</a>
-</p>
+<section>
+  <h2>Example</h2>
+  <p>
+    A simple fibonacci function: <i>(note: minASM-16 is not available yet)</i>
+  <pre><code>
+<span class="label">fib:</span>
+  <span class="opcode">CGT</span> <span class="register">WR0</span>, <span class="const">$0</span>
+  <span class="opcode">JC</span> <span class="label">success</span>
+  <span class="opcode">ST</span> <span class="register">WR1</span>, <span class="register">WR0</span>
+  <span class="opcode">RET</span>
 
-<h2>minASM</h2>
-Assembler dialect for minCPU (kinda obvious)
-<h4>minASM-8</h4>
-<p>
-  No labels, runs on Python, <b>no longer maintained.</b><br />
-  <a href="https://gitlab.com/mincpu/minasm-8">GitLab</a>
-</p>
+<span class="label">success:</span>
+  <span class="opcode">DEC</span> <span class="register">WR0</span>
+  <span class="opcode">CALL</span> <span class="label">fib</span>
+  <span class="opcode">ST</span> <span class="register">WR2</span>, <span class="register">WR1</span>
+  <span class="opcode">DEC</span> <span class="register">WR0</span>
+  <span class="opcode">CALL</span> <span class="label">fib</span>
+  <span class="opcode">ADD</span> <span class="register">WR1</span>, <span class="register">WR2</span>
+  <span class="opcode">RET</span>
+
+<span class="label">_main:</span>
+  <span class="opcode">ST</span> <span class="register">WR0</span>, <span class="const">10</span>
+  <span class="opcode">CALL</span> <span class="label">fib</span>
+  <span class="opcode">HLT</span>
+      </code></pre>
+  Easy, I know.<br />
+  Want more examples? <a href="examples/" aria-label="See more examples of minCPU/minASM">Look here!</a>
+  </p>
+</section>
+
+<section>
+  <h2>But I don't like 16-bit...</h2>
+  <p>
+    That's okay, because minCPU has an 8-bit version too!<br />
+    <i>And it'll get a 32-bit version soon.</i>
+  </p>
+</section>
+
+<section>
+  <h2>Isn't it just bytecode?</h2>
+  <p>
+    Uh... Well... yeah it is... I guess...
+  </p>
+</section>
+
+<section>
+  <h2>CPU Versions</h2>
+
+  <article style="margin-bottom: 1.5em;">
+    <h3>minCPU-16</h3>
+    <p>
+      A complete rewrite based on experience. 16-bit architecture, real function support.
+    </p>
+    <p><a href="https://gitlab.com/mincpu/mincpu-16">GitLab Repo</a></p>
+  </article>
+
+  <article style="margin-bottom: 1.5em;">
+    <h3>minCPU-8</h3>
+    <p>
+      The very first minCPU. Runs on Python. Extremely limited.<br />
+      <span style="color: #ff5555;">Unmaintained</span><br />
+      <i>Incompatible with minCPU-16.</i>
+    </p>
+    <p><a href="https://gitlab.com/mincpu/mincpu-8">GitLab Repo</a></p>
+  </article>
+
+  <article style="margin-bottom: 1.5em;">
+    <h3>minCPU-32?? <i>(future?)</i></h3>
+    <p><i>Maybe someday...</i></p>
+  </article>
+</section>
+
+<section>
+  <h2>Assembler (minASM)</h2>
+
+  <article style="margin-bottom: 1.5em;">
+    <h3>minASM-8</h3>
+    <p>
+      Early assembler for minCPU-8. No label support.<br />
+      <span style="color: #ff5555;">Unmaintained</span>
+    </p>
+    <p><a href="https://gitlab.com/mincpu/minasm-8">GitLab Repo</a></p>
+  </article>
+
+  <article style="margin-bottom: 1.5em;">
+    <h3>minASM-16</h3>
+    <p><i>Coming soon!</i></p>
+  </article>
+</section>
